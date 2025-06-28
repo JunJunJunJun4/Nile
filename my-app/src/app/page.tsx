@@ -30,7 +30,7 @@ export default function Home() {
             className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
             onClick={() => setShowAnswer(true)}
           >
-            答えを見るねん
+            答えを見るねん２
           </button>
         )}
         <button
