@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../services/firebase"; // ← パスが異なる場合は修正してください
+import { db } from "../../firebase"; // ← パスが異なる場合は修正してください
 
 export const fetchQuizzes = async () => {
   try {
