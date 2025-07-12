@@ -1,14 +1,38 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
-    <div>
-      <h2>ようこそ！</h2>
-      <p>このアプリではクイズにチャレンジできます。</p>
-      <Link to="/quiz">
-        <button>クイズを始める</button>
-      </Link>
+    <div style={{ display: "flex" }}>
+      <Sidebar />
+
+      <div style={{ marginLeft: "200px", width: "100%" }}>
+        <Header />
+        <main style={{ padding: "20px" }}>
+          <h1>ようこそ！</h1>
+          <p>今日のクイズに挑戦してみましょう！</p>
+          <button
+            onClick={() => navigate("/quiz")}
+            style={{
+              padding: "10px 20px",
+              fontSize: "16px",
+              borderRadius: "8px",
+              backgroundColor: "#dceef9",
+              border: "none",
+              cursor: "pointer",
+              transition: "background-color 0.2s",
+            }}
+            onMouseOver={(e) => (e.target.style.backgroundColor = "#f3e2b3")}
+            onMouseOut={(e) => (e.target.style.backgroundColor = "#dceef9")}
+          >
+            クイズを始める
+          </button>
+        </main>
+      </div>
     </div>
   );
 }
