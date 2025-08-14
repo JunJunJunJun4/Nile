@@ -25,4 +25,4 @@ const db = getFirestore(app); // Import and initialize the database
 export { db }; // Export the database instance
 
 
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);

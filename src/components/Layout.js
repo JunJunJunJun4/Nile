@@ -1,20 +1,33 @@
-// Layout.js
-import React from "react";
-import Sidebar from "./Sidebar";
-import Header from "./Header";
+import React from 'react';
+import Sidebar from './Sidebar';
+import Header from './Header';
 
-const Layout = ({ children }) => {
-  return (
-    <div style={{ display: "flex", height: "100vh" }}>
-      <Sidebar />
-      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <Header />
-        <main style={{ flex: 1, padding: "20px", backgroundColor: "#f7f9fc" }}>
-          {children}
-        </main>
-      </div>
+const Layout = ({ children }) => (
+  <div style={styles.container}>
+    <Sidebar />
+    <div style={styles.main}>
+      <Header />
+      <div style={styles.content}>{children}</div>
     </div>
-  );
+  </div>
+);
+
+const styles = {
+  container: {
+    display: 'flex',
+    height: '100vh',
+    backgroundColor: '#f8fafc',
+  },
+  main: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  content: {
+    flex: 1,
+    overflowY: 'auto',
+    padding: '20px',
+  },
 };
 
 export default Layout;
