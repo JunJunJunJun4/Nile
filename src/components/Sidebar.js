@@ -3,18 +3,19 @@ import { Link } from 'react-router-dom';
 import nileIcon from '../assets/images/nile-icon.png';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const SIDEBAR_WIDTH = 240;
+
+  const SIDEBAR_WIDTH = 180;
 
   return (
     <div
       style={{
         ...styles.sidebar,
         left: isOpen ? 0 : -SIDEBAR_WIDTH,
+        visibility: isOpen ? 'visible' : 'hidden',
       }}
     >
       <div style={styles.header}>
         <img src={nileIcon} alt="Nile ロゴ" style={styles.logo} />
-        <button onClick={toggleSidebar} style={styles.closeBtn}>×</button>
       </div>
       <nav style={styles.nav}>
         <Link to="/" style={styles.link} onClick={toggleSidebar}>🏠 ホーム</Link>
@@ -28,16 +29,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
 const styles = {
   sidebar: {
-    width: '240px',
+    width: '232px',
     height: '100vh',
     backgroundColor: '#dceef9',
     position: 'fixed',
     top: 0,
+    left: '-240px',
     boxShadow: '2px 0 6px rgba(0,0,0,0.1)',
     display: 'flex',
     flexDirection: 'column',
     padding: '12px 16px',
-    transition: 'left 0.3s ease',
+    transition: 'left 0.3s ease, visibility 0.3s ease',
     zIndex: 1000,
   },
   header: {
@@ -50,13 +52,6 @@ const styles = {
     width: '40px',
     height: '40px',
     borderRadius: '12px',
-  },
-  closeBtn: {
-    fontSize: '24px',
-    background: 'transparent',
-    border: 'none',
-    cursor: 'pointer',
-    color: '#333',
   },
   nav: {
     display: 'flex',

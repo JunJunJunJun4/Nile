@@ -38,6 +38,7 @@ function Question() {
   };
 
   return (
+          <div style={{ marginLeft: "248px", width: "100%" }}>
     <main style={{ padding: '20px' }}>
       {isFinished ? (
         <>
@@ -48,28 +49,35 @@ function Question() {
         <>
           <h2>クイズ {currentIndex + 1} / {questions.length}</h2>
           <p>{currentQuestion.question}</p>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            {currentQuestion.options.map((option, i) => {
-              const isCorrect = showAnswer && option === currentQuestion.answer;
-              const isWrong = showAnswer && option === selectedOption && option !== currentQuestion.answer;
+          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px' }}>
+  {currentQuestion.options.map((option, i) => {
+    const isCorrect = showAnswer && option === currentQuestion.answer;
+    const isWrong = showAnswer && option === selectedOption && option !== currentQuestion.answer;
 
-              return (
-                <li key={i}>
-                  <button
-                    onClick={() => handleOptionClick(option)}
-                    disabled={showAnswer}
-                    style={{
-                      backgroundColor: isCorrect ? 'lightgreen' : isWrong ? 'salmon' : '',
-                      margin: '5px',
-                      padding: '10px',
-                    }}
-                  >
-                    {option}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+    return (
+      <li key={i}>
+        <button
+          onClick={() => handleOptionClick(option)}
+          disabled={showAnswer}
+          style={{
+            backgroundColor: isCorrect ? 'lightgreen' : isWrong ? 'salmon' : '#fff',
+            padding: '15px 20px',       // 高さと余白を少し大きく
+            width: '100%',               // 幅を揃える
+            boxSizing: 'border-box',     // パディング込みで幅を計算
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+            cursor: showAnswer ? 'default' : 'pointer',
+            textAlign: 'left',           // 左寄せにしたい場合
+            fontSize: '16px',
+          }}
+        >
+          {option}
+        </button>
+      </li>
+    );
+  })}
+</ul>
+
           {showAnswer && (
             <>
               <p><strong>解説:</strong> {currentQuestion.explanation}</p>
@@ -79,6 +87,7 @@ function Question() {
         </>
       )}
     </main>
+    </div>
   );
 }
 
