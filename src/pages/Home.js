@@ -1,14 +1,9 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
-
 function Home() {
   const navigate = useNavigate();
 
   return (
     <div style={{ display: "flex" }}>
-
       <div style={{ marginLeft: "248px", width: "100%" }}>
         <main style={{ padding: "20px" }}>
           <h1>ようこそ！</h1>
