@@ -25,7 +25,6 @@ const styles = {
   },
   content: {
     flex: 1,
-    overflowY: 'auto',
     padding: '20px',
   },
 };

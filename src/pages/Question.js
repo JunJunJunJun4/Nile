@@ -46,23 +46,31 @@ function Question() {
     <div style={{ display: "flex" }}>
       <Sidebar />
 
-      <div style={{ marginLeft: "200px", width: "100%" }}>
+      <div style={{ marginLeft: "240px", flex: 1, overflowX: "hidden" }}>
         <Header />
 
-        <main style={{ padding: "20px" }}>
+        <main style={{ padding: "20px", overflowX: "hidden" }}>
           {isFinished ? (
             <>
               <h2>結果発表</h2>
-              <p>{questions.length}問中 {score}問正解！</p>
+              <p>
+                {questions.length}問中 {score}問正解！
+              </p>
             </>
           ) : (
             <>
-              <h2>クイズ {currentIndex + 1} / {questions.length}</h2>
+              <h2>
+                クイズ {currentIndex + 1} / {questions.length}
+              </h2>
               <p>{currentQuestion.question}</p>
               <ul style={{ listStyle: "none", padding: 0 }}>
                 {currentQuestion.options.map((option, i) => {
-                  const isCorrect = showAnswer && option === currentQuestion.answer;
-                  const isWrong = showAnswer && option === selectedOption && option !== currentQuestion.answer;
+                  const isCorrect =
+                    showAnswer && option === currentQuestion.answer;
+                  const isWrong =
+                    showAnswer &&
+                    option === selectedOption &&
+                    option !== currentQuestion.answer;
 
                   return (
                     <li key={i}>
@@ -88,7 +96,9 @@ function Question() {
 
               {showAnswer && (
                 <>
-                  <p><strong>解説:</strong> {currentQuestion.explanation}</p>
+                  <p>
+                    <strong>解説:</strong> {currentQuestion.explanation}
+                  </p>
                   <button onClick={handleNext}>次へ</button>
                 </>
               )}

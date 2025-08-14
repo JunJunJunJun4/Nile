@@ -8,10 +8,8 @@ function Home() {
 
   return (
     <div style={{ display: "flex" }}>
-      <Sidebar />
 
       <div style={{ marginLeft: "200px", width: "100%" }}>
-        <Header />
         <main style={{ padding: "20px" }}>
           <h1>ようこそ！</h1>
           <p>今日のクイズに挑戦してみましょう！</p>

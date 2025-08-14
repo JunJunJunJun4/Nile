@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import nileIcon from "../assets/images/nile-icon.png"; // ヘッダーと共通
+import nileIcon from "../assets/images/nile-icon.png";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +10,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* ☰ ハンバーガーアイコン（折りたたみ時のみ表示） */}
+      {/* ハンバーガーアイコン */}
       {!isOpen && (
         <button onClick={toggleSidebar} style={styles.hamburgerBtn}>
           ☰
@@ -21,20 +21,25 @@ const Sidebar = () => {
       {isOpen && (
         <div style={styles.sidebar}>
           <div style={styles.header}>
-            {/* アイコン画像（共通のNileロゴ） */}
             <img src={nileIcon} alt="Nile ロゴ" style={styles.logo} />
-
-            {/* ×ボタン */}
             <button onClick={closeSidebar} style={styles.closeBtn}>
               ×
             </button>
           </div>
 
           <nav style={styles.nav}>
-            <Link to="/" style={styles.link} onClick={closeSidebar}>🏠 ホーム</Link>
-            <Link to="/quiz" style={styles.link} onClick={closeSidebar}>❓ クイズ</Link>
-            <Link to="/result" style={styles.link} onClick={closeSidebar}>📊 結果</Link>
-            <Link to="/profile" style={styles.link} onClick={closeSidebar}>👤 プロフィール</Link>
+            <Link to="/" style={styles.link} onClick={closeSidebar}>
+              🏠 ホーム
+            </Link>
+            <Link to="/quiz" style={styles.link} onClick={closeSidebar}>
+              ❓ クイズ
+            </Link>
+            <Link to="/result" style={styles.link} onClick={closeSidebar}>
+              📊 結果
+            </Link>
+            <Link to="/profile" style={styles.link} onClick={closeSidebar}>
+              👤 プロフィール
+            </Link>
           </nav>
         </div>
       )}
