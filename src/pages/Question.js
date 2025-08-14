@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { fetchQuestions } from "../features/questions/questionAPI";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+// src/pages/Question.js
+import React, { useEffect, useState } from 'react';
+import { fetchQuestions } from '../features/questions/questionAPI';
 
 function Question() {
   const [questions, setQuestions] = useState([]);
@@ -27,9 +26,7 @@ function Question() {
     if (showAnswer) return;
     setSelectedOption(option);
     setShowAnswer(true);
-    if (option === currentQuestion.answer) {
-      setScore((prev) => prev + 1);
-    }
+    if (option === currentQuestion.answer) setScore(prev => prev + 1);
   };
 
   const handleNext = () => {
@@ -37,76 +34,51 @@ function Question() {
       setCurrentIndex(currentIndex + 1);
       setSelectedOption(null);
       setShowAnswer(false);
-    } else {
-      setIsFinished(true);
-    }
+    } else setIsFinished(true);
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <Sidebar />
+    <main style={{ padding: '20px' }}>
+      {isFinished ? (
+        <>
+          <h2>結果発表</h2>
+          <p>{questions.length}問中 {score}問正解！</p>
+        </>
+      ) : (
+        <>
+          <h2>クイズ {currentIndex + 1} / {questions.length}</h2>
+          <p>{currentQuestion.question}</p>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {currentQuestion.options.map((option, i) => {
+              const isCorrect = showAnswer && option === currentQuestion.answer;
+              const isWrong = showAnswer && option === selectedOption && option !== currentQuestion.answer;
 
-      <div style={{ marginLeft: "240px", flex: 1, overflowX: "hidden" }}>
-        <Header />
-
-        <main style={{ padding: "20px", overflowX: "hidden" }}>
-          {isFinished ? (
+              return (
+                <li key={i}>
+                  <button
+                    onClick={() => handleOptionClick(option)}
+                    disabled={showAnswer}
+                    style={{
+                      backgroundColor: isCorrect ? 'lightgreen' : isWrong ? 'salmon' : '',
+                      margin: '5px',
+                      padding: '10px',
+                    }}
+                  >
+                    {option}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          {showAnswer && (
             <>
-              <h2>結果発表</h2>
-              <p>
-                {questions.length}問中 {score}問正解！
-              </p>
-            </>
-          ) : (
-            <>
-              <h2>
-                クイズ {currentIndex + 1} / {questions.length}
-              </h2>
-              <p>{currentQuestion.question}</p>
-              <ul style={{ listStyle: "none", padding: 0 }}>
-                {currentQuestion.options.map((option, i) => {
-                  const isCorrect =
-                    showAnswer && option === currentQuestion.answer;
-                  const isWrong =
-                    showAnswer &&
-                    option === selectedOption &&
-                    option !== currentQuestion.answer;
-
-                  return (
-                    <li key={i}>
-                      <button
-                        onClick={() => handleOptionClick(option)}
-                        disabled={showAnswer}
-                        style={{
-                          backgroundColor: isCorrect
-                            ? "lightgreen"
-                            : isWrong
-                            ? "salmon"
-                            : "",
-                          margin: "5px",
-                          padding: "10px",
-                        }}
-                      >
-                        {option}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-
-              {showAnswer && (
-                <>
-                  <p>
-                    <strong>解説:</strong> {currentQuestion.explanation}
-                  </p>
-                  <button onClick={handleNext}>次へ</button>
-                </>
-              )}
+              <p><strong>解説:</strong> {currentQuestion.explanation}</p>
+              <button onClick={handleNext}>次へ</button>
             </>
           )}
-        </main>
-      </div>
-    </div>
+        </>
+      )}
+    </main>
   );
 }
 
