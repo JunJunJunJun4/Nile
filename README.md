@@ -10,11 +10,6 @@
 ユーザーは教材間の差分を勉強できる。
 内部に構造に関するデータを持っており、ユーザーの頭のインフラレベルで成長を促すことができる。
 
-# ER図
-![Uploading 学習アプリER図.png…]()
-
-
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
