@@ -10,6 +10,13 @@
 ユーザーは教材間の差分を勉強できる。
 内部に構造に関するデータを持っており、ユーザーの頭のインフラレベルで成長を促すことができる。
 
+# ER図
+https://github.com/JunJunJunJun4/Nile/issues/1
+
+
+# 画面イメージat202508
+https://github.com/JunJunJunJun4/Nile/issues/2#issue-3353841733
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
