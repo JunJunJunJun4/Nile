@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import nileIcon from "../assets/images/nile-icon.png";
 
-// 変更: styles をここで一度だけ定義（以前の小さな styles は削除）
 const styles = {
   sidebar: {
     width: "232px",
@@ -51,7 +50,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const router = useRouter();
 
   const handleQuestionClick = () => {
-    router.push("/Question");
+    router.push("/question");
   };
 
   return (
