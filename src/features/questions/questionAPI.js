@@ -1,7 +1,6 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 
-// 選択肢をシャッフルする関数
 const shuffleArray = (array) => {
   return array
     .map((value) => ({ value, sort: Math.random() }))
@@ -11,20 +10,21 @@ const shuffleArray = (array) => {
 
 export const fetchQuestions = async () => {
   try {
+    // サブコレクション「items」を指定
     const querySnapshot = await getDocs(
-      collection(db, "questions", "geoPoliBasic", "geoPoliBasicOne")
+      collection(db, "questions", "geoPoliBasicOne", "items")
     );
 
     const questions = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      const correctAnswer = data.options[0]; // 正解は最初の要素
-      const shuffledOptions = shuffleArray(data.options); // シャッフル
+      const correctAnswer = data.option[0]; // 正解は最初の要素
+      const shuffledOptions = shuffleArray(data.option);
 
       return {
         id: doc.id,
         question: data.question,
         options: shuffledOptions,
-        answer: correctAnswer, // 正解はシャッフル前のもの
+        answer: correctAnswer,
         explanation: data.explanation,
       };
     });
