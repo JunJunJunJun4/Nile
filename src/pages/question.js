@@ -18,7 +18,7 @@ function Question() {
     load();
   }, []);
 
-  if (questions.length === 0) return <p>読み込み中...</p>;
+  if (questions.length === 0) return <p>読み込み中....</p>;
 
   const currentQuestion = questions[currentIndex];
 
