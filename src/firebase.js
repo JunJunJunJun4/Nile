@@ -1,8 +1,9 @@
-// Import the functions you need from the SDKs you need
+// firebase.js
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
+// Firebase 設定
 const firebaseConfig = {
   apiKey:
     process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
@@ -21,34 +22,18 @@ const firebaseConfig = {
     "1:850359693771:web:a54cd6ca50acd70789064e",
 };
 
-const hasApiKey = Boolean(firebaseConfig.apiKey);
+// Firebase 初期化
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
 
-if (!hasApiKey) {
-  console.error(
-    "Missing Firebase apiKey. Set NEXT_PUBLIC_FIREBASE_API_KEY in .env.local and restart dev server."
-  );
-}
-
-const app = hasApiKey
-  ? getApps().length
-    ? getApps()[0]
-    : initializeApp(firebaseConfig)
-  : null;
-const auth = app ? getAuth(app) : null;
-const db = app ? getFirestore(app) : null;
-
+// 初期化用 Promise（複数回呼ばれても一度だけ処理）
 let _initPromise = null;
 
 /**
- * initFirebase(): 初期化と（必要なら）匿名ログインを行い、
- * 認証状態が確定するまで待つ。複数回呼んでも一度だけ実行される。
+ * initFirebase(): Firebase 初期化 + 匿名ログインを待つ
  */
 export function initFirebase() {
-  if (!auth) {
-    return Promise.reject(
-      new Error("Firebase not initialized (missing apiKey).")
-    );
-  }
   if (_initPromise) return _initPromise;
 
   _initPromise = new Promise((resolve, reject) => {
@@ -56,7 +41,7 @@ export function initFirebase() {
       auth,
       (user) => {
         unsubscribe();
-        resolve(user); // user が null の場合も resolve（未認証）
+        resolve(user); // user が null の場合も resolve
       },
       (err) => {
         unsubscribe();
@@ -64,18 +49,22 @@ export function initFirebase() {
       }
     );
 
-    // すでにサインイン済みなら onAuthStateChanged のコールバックですぐ resolve される。
-    // 未サインインなら匿名サインインを試みる（失敗しても onAuthStateChanged で判定される）。
+    // 未サインインなら匿名ログインを試す
     signInAnonymously(auth).catch(() => {
-      /* エラーは onAuthStateChanged で拾うか無視（後で呼び出し元で扱う） */
+      /* エラーは onAuthStateChanged で捕捉される */
     });
   });
 
   return _initPromise;
 }
 
-export { app, auth, db };
+/**
+ * signInAnon(): 明示的に匿名ログイン
+ */
 export function signInAnon() {
   if (!auth) return Promise.reject(new Error("Firebase auth not initialized."));
   return signInAnonymously(auth);
 }
+
+// Firebase App をそのままエクスポート（必要な場合）
+export { app };

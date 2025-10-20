@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db, initFirebase } from "../../firebase";
 
 const shuffleArray = (array) => {
   return array
@@ -10,6 +10,9 @@ const shuffleArray = (array) => {
 
 export const fetchQuestions = async () => {
   try {
+    // 🔹 ここで匿名ログイン完了を待つ
+    await initFirebase();
+
     // サブコレクション「items」を指定
     const querySnapshot = await getDocs(
       collection(db, "questions", "geoPoliBasicOne", "items")
@@ -31,7 +34,7 @@ export const fetchQuestions = async () => {
 
     return questions;
   } catch (error) {
-    console.error("クイズ取得エラー:", error);
+    console.error("クイズ取得エラー詳細:", error.code, error.message);
     return [];
   }
 };
