@@ -50,8 +50,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const SIDEBAR_WIDTH = 180;
   const router = useRouter();
 
-  const handleQuizClick = () => {
-    router.push("/quiz");
+  const handleQuestionClick = () => {
+    router.push("/Question");
   };
 
   return (
@@ -74,7 +74,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </li>
           <li>
             <button
-              onClick={handleQuizClick}
+              onClick={handleQuestionClick}
               style={{
                 ...styles.link,
                 background: "transparent",

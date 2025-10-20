@@ -21,7 +21,7 @@ function Home() {
           <h1>ようこそ！</h1>
           <p>今日のクイズに挑戦してみましょう！</p>
           <Link
-            href="/quiz"
+            href="/Question"
             style={buttonStyle}
             onMouseEnter={(e) =>
               (e.currentTarget.style.backgroundColor = "#f3e2b3")

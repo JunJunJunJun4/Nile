@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Result() {
   return (
     <main style={{ padding: 24 }}>
