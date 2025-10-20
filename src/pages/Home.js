@@ -19,7 +19,7 @@ function Home() {
       <div style={{ marginLeft: "248px", width: "100%" }}>
         <main style={{ padding: "20px" }}>
           <h1>ようこそ！</h1>
-          <p>今日のクイズに挑戦してみましょう！</p>
+          <p>今日のクイズに挑戦してみましょう</p>
           <Link
             href="/question"
             style={buttonStyle}
