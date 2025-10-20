@@ -4,17 +4,38 @@ import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey:
+    process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
+    "AIzaSyCa4a1rlRvg8vId_lQy865eqvw_aDAJz2w",
+  authDomain:
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
+    "nile2-18aa3.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "nile2-18aa3",
+  storageBucket:
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+    "nile2-18aa3.firebasestorage.app",
+  messagingSenderId:
+    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "850359693771",
+  appId:
+    process.env.NEXT_PUBLIC_FIREBASE_APP_ID ||
+    "1:850359693771:web:a54cd6ca50acd70789064e",
 };
 
-const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const hasApiKey = Boolean(firebaseConfig.apiKey);
+
+if (!hasApiKey) {
+  console.error(
+    "Missing Firebase apiKey. Set NEXT_PUBLIC_FIREBASE_API_KEY in .env.local and restart dev server."
+  );
+}
+
+const app = hasApiKey
+  ? getApps().length
+    ? getApps()[0]
+    : initializeApp(firebaseConfig)
+  : null;
+const auth = app ? getAuth(app) : null;
+const db = app ? getFirestore(app) : null;
 
 let _initPromise = null;
 
@@ -23,6 +44,11 @@ let _initPromise = null;
  * 認証状態が確定するまで待つ。複数回呼んでも一度だけ実行される。
  */
 export function initFirebase() {
+  if (!auth) {
+    return Promise.reject(
+      new Error("Firebase not initialized (missing apiKey).")
+    );
+  }
   if (_initPromise) return _initPromise;
 
   _initPromise = new Promise((resolve, reject) => {
@@ -50,5 +76,6 @@ export function initFirebase() {
 
 export { app, auth, db };
 export function signInAnon() {
+  if (!auth) return Promise.reject(new Error("Firebase auth not initialized."));
   return signInAnonymously(auth);
 }
