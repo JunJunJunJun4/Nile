@@ -1,10 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/Home';
-import Question from './pages/Question';
-import Result from './pages/Result';
-import Profile from './pages/Profile';
+"use client";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import Question from "./pages/Question";
+import Result from "./pages/Result";
+import Profile from "./pages/Profile";
 
 function App() {
   return (

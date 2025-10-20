@@ -1,28 +1,54 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
+import { initializeApp, getApps } from "firebase/app";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCa4a1rlRvg8vId_lQy865eqvw_aDAJz2w",
-  authDomain: "nile2-18aa3.firebaseapp.com",
-  databaseURL: "https://nile2-18aa3-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "nile2-18aa3",
-  storageBucket: "nile2-18aa3.firebasestorage.app",
-  messagingSenderId: "850359693771",
-  appId: "1:850359693771:web:a54cd6ca50acd70789064e",
-  measurementId: "G-621VRDQ03W"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app); // Import and initialize the database
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-export { db }; // Export the database instance
+let _initPromise = null;
 
+/**
+ * initFirebase(): 初期化と（必要なら）匿名ログインを行い、
+ * 認証状態が確定するまで待つ。複数回呼んでも一度だけ実行される。
+ */
+export function initFirebase() {
+  if (_initPromise) return _initPromise;
 
-// const analytics = getAnalytics(app);
+  _initPromise = new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user); // user が null の場合も resolve（未認証）
+      },
+      (err) => {
+        unsubscribe();
+        reject(err);
+      }
+    );
+
+    // すでにサインイン済みなら onAuthStateChanged のコールバックですぐ resolve される。
+    // 未サインインなら匿名サインインを試みる（失敗しても onAuthStateChanged で判定される）。
+    signInAnonymously(auth).catch(() => {
+      /* エラーは onAuthStateChanged で拾うか無視（後で呼び出し元で扱う） */
+    });
+  });
+
+  return _initPromise;
+}
+
+export { app, auth, db };
+export function signInAnon() {
+  return signInAnonymously(auth);
+}
