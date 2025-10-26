@@ -1,9 +1,8 @@
-// firebase.js
+// src/firebase.js
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Firebase 設定
 const firebaseConfig = {
   apiKey:
     process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
@@ -22,17 +21,13 @@ const firebaseConfig = {
     "1:850359693771:web:a54cd6ca50acd70789064e",
 };
 
-// Firebase 初期化
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-// 初期化用 Promise（複数回呼ばれても一度だけ処理）
 let _initPromise = null;
 
-/**
- * initFirebase(): Firebase 初期化 + 匿名ログインを待つ
- */
 export function initFirebase() {
   if (_initPromise) return _initPromise;
 
@@ -41,7 +36,7 @@ export function initFirebase() {
       auth,
       (user) => {
         unsubscribe();
-        resolve(user); // user が null の場合も resolve
+        resolve(user);
       },
       (err) => {
         unsubscribe();
@@ -49,22 +44,15 @@ export function initFirebase() {
       }
     );
 
-    // 未サインインなら匿名ログインを試す
-    signInAnonymously(auth).catch(() => {
-      /* エラーは onAuthStateChanged で捕捉される */
-    });
+    signInAnonymously(auth).catch(() => {});
   });
 
   return _initPromise;
 }
 
-/**
- * signInAnon(): 明示的に匿名ログイン
- */
 export function signInAnon() {
   if (!auth) return Promise.reject(new Error("Firebase auth not initialized."));
   return signInAnonymously(auth);
 }
 
-// Firebase App をそのままエクスポート（必要な場合）
 export { app };

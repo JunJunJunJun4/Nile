@@ -1,9 +1,7 @@
 "use client";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import nileIcon from "../assets/images/nile-icon.png";
 
 const styles = {
   sidebar: {
@@ -50,7 +48,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   const router = useRouter();
 
   const handleQuestionClick = () => {
-    toggleSidebar(); // クリックでサイドバーを閉じる
+    toggleSidebar();
     router.push("/question");
   };
 
@@ -64,7 +62,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     >
       <div style={styles.header}>
         <Image
-          src={nileIcon}
+          src="/images/nile-icon.png"
           alt="Nile ロゴ"
           width={40}
           height={40}

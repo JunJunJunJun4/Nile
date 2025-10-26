@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import nileIcon from "../assets/images/nile-icon.png";
 
 export default function Header({ toggleSidebar, isSidebarOpen }) {
   const SIDEBAR_WIDTH = 248;
@@ -41,7 +40,7 @@ export default function Header({ toggleSidebar, isSidebarOpen }) {
         ☰
       </button>
       <Image
-        src={nileIcon}
+        src="/images/nile-icon.png"
         alt="Nile ロゴ"
         width={40}
         height={40}
