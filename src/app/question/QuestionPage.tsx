@@ -1,19 +1,33 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { fetchQuestions } from "../../features/questions/questionAPI";
 
+// Question の型定義
+type Question = {
+  id: string;
+  question: string;
+  options: string[];
+  answer: string;
+  explanation: string;
+};
+
 export default function QuestionPage() {
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     const load = async () => {
-      const data = await fetchQuestions();
-      setQuestions(data);
+      try {
+        const data = await fetchQuestions();
+        setQuestions(data);
+        console.log("取得したクイズ:", data);
+      } catch (error) {
+        console.error("クイズ取得エラー:", error);
+      }
     };
     load();
   }, []);
@@ -22,12 +36,12 @@ export default function QuestionPage() {
 
   const currentQuestion = questions[currentIndex];
 
-  const handleOptionClick = (option) => {
-    if (showAnswer) return;
+  const handleOptionClick = (option: string) => {
+    if (selectedOption) return; // すでに選択済みなら無視
     setSelectedOption(option);
     if (option === currentQuestion.answer) setScore((prev) => prev + 1);
 
-    // 選択したらすぐ次の問題
+    // 選択したら次の問題へ
     if (currentIndex + 1 < questions.length) {
       setTimeout(() => {
         setCurrentIndex(currentIndex + 1);
