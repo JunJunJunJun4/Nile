@@ -1,6 +1,8 @@
 "use client";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import nileIcon from "../assets/images/nile-icon.png";
 
 const styles = {
@@ -20,13 +22,11 @@ const styles = {
   },
   header: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     marginBottom: "20px",
   },
   logo: {
-    width: "40px",
-    height: "40px",
     borderRadius: "12px",
   },
   nav: {
@@ -45,11 +45,12 @@ const styles = {
   },
 };
 
-const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const SIDEBAR_WIDTH = 180;
+export default function Sidebar({ isOpen, toggleSidebar }) {
+  const SIDEBAR_WIDTH = 232;
   const router = useRouter();
 
   const handleQuestionClick = () => {
+    toggleSidebar(); // クリックでサイドバーを閉じる
     router.push("/question");
   };
 
@@ -62,10 +63,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       }}
     >
       <div style={styles.header}>
-        <img src={nileIcon} alt="Nile ロゴ" style={styles.logo} />
+        <Image
+          src={nileIcon}
+          alt="Nile ロゴ"
+          width={40}
+          height={40}
+          style={styles.logo}
+        />
       </div>
       <nav style={styles.nav}>
-        <ul>
+        <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
           <li>
             <Link href="/" style={styles.link} onClick={toggleSidebar}>
               🏠 ホーム
@@ -78,6 +85,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                 ...styles.link,
                 background: "transparent",
                 border: "none",
+                cursor: "pointer",
+                textAlign: "left",
               }}
             >
               🎯 クイズ
@@ -97,6 +106,4 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       </nav>
     </div>
   );
-};
-
-export default Sidebar;
+}

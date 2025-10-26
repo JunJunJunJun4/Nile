@@ -1,60 +1,52 @@
-import React from 'react';
-import nileIcon from '../assets/images/nile-icon.png';
+"use client";
+import Image from "next/image";
+import nileIcon from "../assets/images/nile-icon.png";
 
-const SIDEBAR_WIDTH = 248; // Sidebar の幅
-const OFFSET = 28; // サイドバーとハンバーガーの隙間
+export default function Header({ toggleSidebar, isSidebarOpen }) {
+  const SIDEBAR_WIDTH = 248;
+  const OFFSET = 28;
 
-const Header = ({ toggleSidebar, isSidebarOpen }) => {
   return (
-    <header style={styles.header}>
-      {/* ハンバーガーメニュー */}
+    <header
+      style={{
+        position: "relative",
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        padding: "12px 16px",
+        backgroundColor: "#dceef9",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+        width: "100%",
+        boxSizing: "border-box",
+      }}
+    >
       <button
         onClick={toggleSidebar}
         style={{
-          ...styles.hamburgerBtn,
-          left: isSidebarOpen ? SIDEBAR_WIDTH + OFFSET : OFFSET, // サイドバー開閉に応じて左位置変更
+          position: "absolute",
+          left: isSidebarOpen ? SIDEBAR_WIDTH + OFFSET : OFFSET,
+          fontSize: "24px",
+          width: "42px",
+          height: "42px",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          zIndex: 1001,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "left 0.1s ease",
         }}
       >
         ☰
       </button>
-
-      {/* 右端ロゴ */}
-      <img src={nileIcon} alt="Nile ロゴ" style={styles.icon} />
+      <Image
+        src={nileIcon}
+        alt="Nile ロゴ"
+        width={40}
+        height={40}
+        style={{ borderRadius: "12px" }}
+      />
     </header>
   );
-};
-
-const styles = {
-  header: {
-    position: 'relative', // ハンバーガーメニューを絶対配置できるように
-    display: 'flex',
-    justifyContent: 'flex-end', // ロゴは右端
-    alignItems: 'center',
-    padding: '12px 16px',
-    backgroundColor: '#dceef9',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-    width: '100%',
-    boxSizing: 'border-box',
-   },
-   hamburgerBtn: {
-    position: 'absolute',
-    fontSize: '24px',
-    width: '42px',    // ボタン幅
-    height: '42px',   // ボタン高さ
-    background: 'transparent',
-    border: 'none',
-    cursor: 'pointer',
-    zIndex: 1001,
-    transition: 'left 0.1Ss ease',
-    display: 'flex',          // 文字を中央に
-    alignItems: 'center',     // 文字を中央に
-    justifyContent: 'center', // 文字を中央に
-  },
-  icon: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '12px',
-  },
-};
-
-export default Header;
+}

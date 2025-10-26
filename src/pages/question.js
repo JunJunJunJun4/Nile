@@ -1,117 +1,116 @@
-// src/pages/Question.js
 import { useEffect, useState } from "react";
 import { fetchQuestions } from "../features/questions/questionAPI";
+import Layout from "../components/Layout";
+import Link from "next/link";
 
-function Question() {
+export default function Question() {
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore] = useState(0);
+  const [answers, setAnswers] = useState([]); // 各問題の回答履歴
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
-    const load = async () => {
-      const data = await fetchQuestions();
-      setQuestions(data);
-    };
-    load();
+    fetchQuestions().then(setQuestions);
   }, []);
 
-  if (questions.length === 0) return <p>読み込み中....</p>;
+  if (questions.length === 0) return <Layout>読み込み中...</Layout>;
 
   const currentQuestion = questions[currentIndex];
 
   const handleOptionClick = (option) => {
-    if (showAnswer) return;
-    setSelectedOption(option);
-    setShowAnswer(true);
-    if (option === currentQuestion.answer) setScore((prev) => prev + 1);
-  };
+    const isCorrect = option === currentQuestion.answer;
+    if (isCorrect) setScore((prev) => prev + 1);
 
-  const handleNext = () => {
+    // 回答履歴を追加
+    setAnswers((prev) => [
+      ...prev,
+      {
+        question: currentQuestion.question,
+        selected: option,
+        correct: currentQuestion.answer,
+        explanation: currentQuestion.explanation,
+      },
+    ]);
+
+    // 次の問題へ
     if (currentIndex + 1 < questions.length) {
-      setCurrentIndex(currentIndex + 1);
-      setSelectedOption(null);
-      setShowAnswer(false);
-    } else setIsFinished(true);
+      setCurrentIndex((i) => i + 1);
+    } else {
+      setIsFinished(true); // 最後の問題なら終了
+    }
   };
 
+  // 結果ページ表示
+  if (isFinished) {
+    return (
+      <Layout>
+        <h2>結果発表</h2>
+        <p>
+          {questions.length}問中 {score}問正解！
+        </p>
+
+        <h3>解説</h3>
+        <ul>
+          {answers.map((a, i) => (
+            <li key={i} style={{ marginBottom: "16px" }}>
+              <p>
+                <strong>Q{i + 1}:</strong> {a.question}
+              </p>
+              <p>
+                あなたの回答: {a.selected} / 正解: {a.correct}
+              </p>
+              <p>解説: {a.explanation}</p>
+            </li>
+          ))}
+        </ul>
+
+        <Link
+          href="/"
+          style={{
+            display: "inline-block",
+            marginTop: "20px",
+            padding: "10px 16px",
+            borderRadius: "8px",
+            backgroundColor: "#dceef9",
+            textDecoration: "none",
+            color: "inherit",
+            cursor: "pointer",
+          }}
+        >
+          ホームに戻る
+        </Link>
+      </Layout>
+    );
+  }
+
+  // 現在の問題表示
   return (
-    <div style={{ marginLeft: "248px", width: "100%" }}>
-      <main style={{ padding: "20px" }}>
-        {isFinished ? (
-          <>
-            <h2>結果発表</h2>
-            <p>
-              {questions.length}問中 {score}問正解！
-            </p>
-          </>
-        ) : (
-          <>
-            <h2>
-              クイズ {currentIndex + 1} / {questions.length}
-            </h2>
-            <p>{currentQuestion.question}</p>
-            <ul
+    <Layout>
+      <h2>
+        クイズ {currentIndex + 1} / {questions.length}
+      </h2>
+      <p>{currentQuestion.question}</p>
+      <ul style={{ listStyle: "none", padding: 0 }}>
+        {currentQuestion.options.map((option, i) => (
+          <li key={i}>
+            <button
+              onClick={() => handleOptionClick(option)}
               style={{
-                listStyle: "none",
-                padding: 0,
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                maxWidth: "400px",
+                width: "100%",
+                padding: "12px",
+                marginBottom: "8px",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                cursor: "pointer",
+                textAlign: "left",
               }}
             >
-              {currentQuestion.options.map((option, i) => {
-                const isCorrect =
-                  showAnswer && option === currentQuestion.answer;
-                const isWrong =
-                  showAnswer &&
-                  option === selectedOption &&
-                  option !== currentQuestion.answer;
-
-                return (
-                  <li key={i}>
-                    <button
-                      onClick={() => handleOptionClick(option)}
-                      disabled={showAnswer}
-                      style={{
-                        backgroundColor: isCorrect
-                          ? "lightgreen"
-                          : isWrong
-                          ? "salmon"
-                          : "#fff",
-                        padding: "15px 20px", // 高さと余白を少し大きく
-                        width: "100%", // 幅を揃える
-                        boxSizing: "border-box", // パディング込みで幅を計算
-                        borderRadius: "8px",
-                        border: "1px solid #ccc",
-                        cursor: showAnswer ? "default" : "pointer",
-                        textAlign: "left", // 左寄せにしたい場合
-                        fontSize: "16px",
-                      }}
-                    >
-                      {option}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-
-            {showAnswer && (
-              <>
-                <p>
-                  <strong>解説:</strong> {currentQuestion.explanation}
-                </p>
-                <button onClick={handleNext}>次へ</button>
-              </>
-            )}
-          </>
-        )}
-      </main>
-    </div>
+              {option}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </Layout>
   );
 }
-
-export default Question;
